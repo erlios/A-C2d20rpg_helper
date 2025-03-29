@@ -1,0 +1,101 @@
+{
+  "ca": {
+    "name": "Català",
+    "nativeName": "Català",
+    "translations": {
+      "title": "Fulla de Personatge",
+      "name": "Nom",
+      "nationality": "Nacionalitat",
+      "rank": "Rang",
+      "archetype": "Arquetip",
+      "background": "Trasfons",
+      "personality": "Personalitat",
+      "personalTraits": "Veritats personals y cicatrius",
+      "stress": "Estrés",
+      "courage": "Coratge",
+      "wounds": "Ferides",
+      "armor": "Blindatge",
+      "fortune": "Fortuna",
+      "languages": "Idiomes",
+      "attributes": {
+        "AGILITY": "AGILITAT",
+        "COORDINATION": "COORDINACIÓ",
+        "STRENGTH": "FORÇA",
+        "INSIGHT": "PERSPICÀCIA",
+        "REASON": "RAÓ",
+        "WILL": "VOLUNTAT"
+      },
+      "attributeLabels": {
+        "attribute": "Atribut",
+        "score": "Puntuació",
+        "extra": "Extra"
+      }
+    }
+  },
+  "es": {
+    "name": "Español",
+    "nativeName": "Castellano",
+    "translations": {
+      "title": "Hoja de Personaje",
+      "name": "Nombre",
+      "nationality": "Nacionalidad",
+      "rank": "Rango",
+      "archetype": "Arquetipo",
+      "background": "Trasfondo",
+      "personality": "Personalidad",
+      "personalTraits": "Verdades personales y tratables",
+      "stress": "Estrés",
+      "courage": "Coraje",
+      "wounds": "Heridas",
+      "armor": "Blindaje",
+      "fortune": "Fortuna",
+      "languages": "Idiomas",
+      "attributes": {
+        "AGILITY": "AGILIDAD",
+        "COORDINATION": "COORDINACIÓN",
+        "STRENGTH": "FUERZA",
+        "INSIGHT": "PERSPICACIA",
+        "REASON": "RAZÓN",
+        "WILL": "VOLUNTAD"
+      },
+      "attributeLabels": {
+        "attribute": "Atributo",
+        "score": "Puntuación",
+        "extra": "Extra"
+      }
+    }
+  },
+  "en": {
+    "name": "English",
+    "nativeName": "English",
+    "translations": {
+      "title": "Character Sheet",
+      "name": "Name",
+      "nationality": "Nationality",
+      "rank": "Rank",
+      "archetype": "Archetype",
+      "background": "Background",
+      "personality": "Personality",
+      "personalTraits": "Personal Traits",
+      "stress": "Stress",
+      "courage": "Courage",
+      "wounds": "Wounds",
+      "armor": "Armor",
+      "fortune": "Fortune",
+      "languages": "Languages",
+      "attributes": {
+        "AGILITY": "AGILITY",
+        "COORDINATION": "COORDINATION",
+        "STRENGTH": "STRENGTH",
+        "INSIGHT": "INSIGHT",
+        "REASON": "REASON",
+        "WILL": "WILL"
+      },
+      "attributeLabels": {
+        "attribute": "Attribute",
+        "score": "Score",
+        "extra": "Extra"
+      }
+    }
+  }
+}
