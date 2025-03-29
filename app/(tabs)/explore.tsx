@@ -1,3 +1,4 @@
+import React from "react";
 import {
   StyleSheet,
   Platform,
@@ -52,7 +53,7 @@ type CharacterData = {
 
 export default function ExploreScreen() {
   const [currentLanguage, setCurrentLanguage] = useState<Language>("ca");
-  const [showLanguageModal, setShowLanguageModal] = useState(false);
+  const [focusedInput, setFocusedInput] = useState<string | null>(null);
   const [characterData, setCharacterData] = useState<CharacterData>({
     name: "",
     nationality: "",
@@ -113,226 +114,254 @@ export default function ExploreScreen() {
     });
   };
 
+  const getInputStyle = (inputId: string) => {
+    return [styles.input, focusedInput === inputId && styles.inputFocused];
+  };
+
   return (
-    <ScrollView style={styles.container}>
-      <ThemedView style={styles.languageSelector}>
-        <View style={styles.picker}>
-          <ThemedText>
-            {availableLanguages.map(([code, lang]) => lang.name).join(" / ")}:
-          </ThemedText>
-          <Pressable onPress={() => setShowLanguageModal(true)}>
-            <ThemedText style={styles.languageButton}>
-              {translations[currentLanguage].nativeName}
+    <>
+      <style>
+        {`
+          input:focus {
+            outline: none !important;
+            -webkit-appearance: none !important;
+            box-shadow: none !important;
+            background-color: #FFFFFF !important;
+          }
+          input {
+            -webkit-tap-highlight-color: transparent;
+          }
+        `}
+      </style>
+      <ScrollView style={styles.container}>
+        <ThemedView style={styles.languageSelector}>
+          <View style={styles.languagePicker}>
+            <ThemedText style={styles.fieldLabel}>
+              <ThemedText style={styles.fieldLabelText}>Language</ThemedText>
             </ThemedText>
-          </Pressable>
-        </View>
-      </ThemedView>
-
-      <Modal
-        visible={showLanguageModal}
-        transparent={true}
-        animationType='slide'
-        onRequestClose={() => setShowLanguageModal(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <ThemedView style={styles.modalContent}>
-            <ThemedText style={styles.modalTitle}>Select Language</ThemedText>
-            {availableLanguages.map(([code, lang]) => (
-              <Pressable
-                key={code}
-                style={styles.languageOption}
-                onPress={() => {
-                  setCurrentLanguage(code as Language);
-                  setShowLanguageModal(false);
-                }}
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={currentLanguage}
+                onValueChange={(value) => setCurrentLanguage(value as Language)}
+                style={styles.picker}
+                dropdownIconColor='#2F4F4F'
               >
-                <ThemedText
-                  style={[
-                    styles.languageOptionText,
-                    currentLanguage === code && styles.selectedLanguage,
-                  ]}
-                >
-                  {lang.name} ({lang.nativeName})
-                </ThemedText>
-              </Pressable>
-            ))}
-          </ThemedView>
-        </View>
-      </Modal>
-
-      <ThemedView style={styles.form}>
-        <ThemedText style={styles.title}>
-          <ThemedText style={styles.titleText}>{t.title}</ThemedText>
-        </ThemedText>
-
-        {/* Basic Information */}
-        <ThemedView style={styles.section}>
-          <ThemedText style={styles.sectionTitle}>
-            <ThemedText style={styles.titleText}>Basic Information</ThemedText>
-          </ThemedText>
-          <ThemedView style={styles.rowContainer}>
-            <ThemedView style={styles.fieldContainer}>
-              <ThemedText style={styles.fieldLabel}>
-                <ThemedText style={styles.fieldLabelText}>{t.name}</ThemedText>
-              </ThemedText>
-              <TextInput
-                style={styles.input}
-                value={characterData.name}
-                onChangeText={(value) => updateCharacterField("name", value)}
-              />
-            </ThemedView>
-
-            <ThemedView style={styles.fieldContainer}>
-              <ThemedText style={styles.fieldLabel}>
-                <ThemedText style={styles.fieldLabelText}>
-                  {t.nationality}
-                </ThemedText>
-              </ThemedText>
-              <TextInput
-                style={styles.input}
-                value={characterData.nationality}
-                onChangeText={(value) =>
-                  updateCharacterField("nationality", value)
-                }
-              />
-            </ThemedView>
-
-            <ThemedView style={styles.fieldContainer}>
-              <ThemedText style={styles.fieldLabel}>
-                <ThemedText style={styles.fieldLabelText}>{t.rank}</ThemedText>
-              </ThemedText>
-              <TextInput
-                style={styles.input}
-                value={characterData.rank}
-                onChangeText={(value) => updateCharacterField("rank", value)}
-              />
-            </ThemedView>
-          </ThemedView>
-
-          <ThemedView style={styles.rowContainer}>
-            <ThemedView style={styles.fieldContainer}>
-              <ThemedText style={styles.fieldLabel}>
-                <ThemedText style={styles.fieldLabelText}>
-                  {t.archetype}
-                </ThemedText>
-              </ThemedText>
-              <TextInput
-                style={styles.input}
-                value={characterData.archetype}
-                onChangeText={(value) =>
-                  updateCharacterField("archetype", value)
-                }
-              />
-            </ThemedView>
-
-            <ThemedView style={styles.fieldContainer}>
-              <ThemedText style={styles.fieldLabel}>
-                <ThemedText style={styles.fieldLabelText}>
-                  {t.background}
-                </ThemedText>
-              </ThemedText>
-              <TextInput
-                style={styles.input}
-                value={characterData.background}
-                onChangeText={(value) =>
-                  updateCharacterField("background", value)
-                }
-              />
-            </ThemedView>
-
-            <ThemedView style={styles.fieldContainer}>
-              <ThemedText style={styles.fieldLabel}>
-                <ThemedText style={styles.fieldLabelText}>
-                  {t.personality}
-                </ThemedText>
-              </ThemedText>
-              <TextInput
-                style={styles.input}
-                value={characterData.personality}
-                onChangeText={(value) =>
-                  updateCharacterField("personality", value)
-                }
-              />
-            </ThemedView>
-          </ThemedView>
+                {availableLanguages.map(([code, lang]) => (
+                  <Picker.Item
+                    key={code}
+                    label={lang.nativeName}
+                    value={code}
+                  />
+                ))}
+              </Picker>
+            </View>
+          </View>
         </ThemedView>
 
-        {/* Personal Traits Section */}
-        <ThemedView style={styles.section}>
-          <ThemedText style={styles.sectionTitle}>
-            <ThemedText style={styles.titleText}>{t.personalTraits}</ThemedText>
+        <ThemedView style={styles.form}>
+          <ThemedText style={styles.title}>
+            <ThemedText style={styles.titleText}>{t.title}</ThemedText>
           </ThemedText>
-          <ThemedView style={styles.rowContainer}>
-            {characterData.personalTraits.map((trait, index) => (
-              <ThemedView key={index} style={styles.traitContainer}>
+
+          {/* Basic Information */}
+          <ThemedView style={styles.section}>
+            <ThemedView style={styles.rowContainer}>
+              <ThemedView style={styles.fieldContainer}>
+                <ThemedText style={styles.fieldLabel}>
+                  <ThemedText style={styles.fieldLabelText}>
+                    {t.name}
+                  </ThemedText>
+                </ThemedText>
                 <TextInput
-                  style={[styles.traitInput, { minHeight: 75 }]}
-                  value={trait}
-                  onChangeText={(value) => {
-                    const newTraits = [...characterData.personalTraits];
-                    newTraits[index] = value;
-                    updateCharacterField("personalTraits", newTraits);
-                  }}
-                  multiline
-                  numberOfLines={3}
-                  textAlignVertical='top'
+                  style={getInputStyle("name")}
+                  value={characterData.name}
+                  onChangeText={(value) => updateCharacterField("name", value)}
+                  onFocus={() => setFocusedInput("name")}
+                  onBlur={() => setFocusedInput(null)}
                 />
               </ThemedView>
-            ))}
-          </ThemedView>
-        </ThemedView>
 
-        {/* Attributes Section */}
-        <ThemedView style={styles.section}>
-          <ThemedView style={styles.attributesContainer}>
-            {/* Row Titles Column */}
-            <ThemedView style={styles.rowTitlesColumn}>
-              <ThemedText style={styles.rowTitle}>
-                {t.attributeLabels.attribute}
-              </ThemedText>
-              <ThemedText style={styles.rowTitle}>
-                {t.attributeLabels.score}
-              </ThemedText>
-              <ThemedText style={styles.rowTitle}>
-                {t.attributeLabels.extra}
-              </ThemedText>
-            </ThemedView>
-
-            {/* Attribute Data Columns */}
-            {attributes.map((attr) => (
-              <ThemedView key={attr} style={styles.attributeColumn}>
-                <ThemedText style={styles.attributeName} numberOfLines={1}>
-                  {t.attributes[attr]}
+              <ThemedView style={styles.fieldContainer}>
+                <ThemedText style={styles.fieldLabel}>
+                  <ThemedText style={styles.fieldLabelText}>
+                    {t.nationality}
+                  </ThemedText>
                 </ThemedText>
-                <View style={styles.pickerContainer}>
-                  <Picker
-                    selectedValue={characterData.attributes[attr].score}
-                    onValueChange={(value) => updateAttributeScore(attr, value)}
-                    style={styles.picker}
-                    dropdownIconColor='#000'
-                  >
-                    <Picker.Item label='-' value='' />
-                    {Array.from({ length: 20 }, (_, i) => i + 6).map((num) => (
-                      <Picker.Item
-                        key={num}
-                        label={num.toString()}
-                        value={num.toString()}
-                      />
-                    ))}
-                  </Picker>
-                </View>
                 <TextInput
-                  style={styles.attributeInput}
-                  value={characterData.attributes[attr].extraDamage}
-                  editable={false}
-                  placeholder='Extra'
+                  style={getInputStyle("nationality")}
+                  value={characterData.nationality}
+                  onChangeText={(value) =>
+                    updateCharacterField("nationality", value)
+                  }
+                  onFocus={() => setFocusedInput("nationality")}
+                  onBlur={() => setFocusedInput(null)}
                 />
               </ThemedView>
-            ))}
+
+              <ThemedView style={styles.fieldContainer}>
+                <ThemedText style={styles.fieldLabel}>
+                  <ThemedText style={styles.fieldLabelText}>
+                    {t.rank}
+                  </ThemedText>
+                </ThemedText>
+                <TextInput
+                  style={getInputStyle("rank")}
+                  value={characterData.rank}
+                  onChangeText={(value) => updateCharacterField("rank", value)}
+                  onFocus={() => setFocusedInput("rank")}
+                  onBlur={() => setFocusedInput(null)}
+                />
+              </ThemedView>
+            </ThemedView>
+
+            <ThemedView style={styles.rowContainer}>
+              <ThemedView style={styles.fieldContainer}>
+                <ThemedText style={styles.fieldLabel}>
+                  <ThemedText style={styles.fieldLabelText}>
+                    {t.archetype}
+                  </ThemedText>
+                </ThemedText>
+                <TextInput
+                  style={getInputStyle("archetype")}
+                  value={characterData.archetype}
+                  onChangeText={(value) =>
+                    updateCharacterField("archetype", value)
+                  }
+                  onFocus={() => setFocusedInput("archetype")}
+                  onBlur={() => setFocusedInput(null)}
+                />
+              </ThemedView>
+
+              <ThemedView style={styles.fieldContainer}>
+                <ThemedText style={styles.fieldLabel}>
+                  <ThemedText style={styles.fieldLabelText}>
+                    {t.background}
+                  </ThemedText>
+                </ThemedText>
+                <TextInput
+                  style={getInputStyle("background")}
+                  value={characterData.background}
+                  onChangeText={(value) =>
+                    updateCharacterField("background", value)
+                  }
+                  onFocus={() => setFocusedInput("background")}
+                  onBlur={() => setFocusedInput(null)}
+                />
+              </ThemedView>
+
+              <ThemedView style={styles.fieldContainer}>
+                <ThemedText style={styles.fieldLabel}>
+                  <ThemedText style={styles.fieldLabelText}>
+                    {t.personality}
+                  </ThemedText>
+                </ThemedText>
+                <TextInput
+                  style={getInputStyle("personality")}
+                  value={characterData.personality}
+                  onChangeText={(value) =>
+                    updateCharacterField("personality", value)
+                  }
+                  onFocus={() => setFocusedInput("personality")}
+                  onBlur={() => setFocusedInput(null)}
+                />
+              </ThemedView>
+            </ThemedView>
+          </ThemedView>
+
+          {/* Personal Traits Section */}
+          <ThemedView style={styles.section}>
+            <ThemedText style={styles.sectionTitle}>
+              <ThemedText style={styles.titleText}>
+                {t.personalTraits}
+              </ThemedText>
+            </ThemedText>
+            <ThemedView style={styles.rowContainer}>
+              {characterData.personalTraits.map((trait, index) => (
+                <ThemedView key={index} style={styles.traitContainer}>
+                  <TextInput
+                    style={[
+                      styles.traitInput,
+                      { minHeight: 75 },
+                      focusedInput === `trait-${index}` && styles.inputFocused,
+                    ]}
+                    value={trait}
+                    onChangeText={(value) => {
+                      const newTraits = [...characterData.personalTraits];
+                      newTraits[index] = value;
+                      updateCharacterField("personalTraits", newTraits);
+                    }}
+                    onFocus={() => setFocusedInput(`trait-${index}`)}
+                    onBlur={() => setFocusedInput(null)}
+                    multiline
+                    numberOfLines={3}
+                    textAlignVertical='top'
+                  />
+                </ThemedView>
+              ))}
+            </ThemedView>
+          </ThemedView>
+
+          {/* Attributes Section */}
+          <ThemedView style={styles.section}>
+            <ThemedView style={styles.attributesContainer}>
+              {/* Row Titles Column */}
+              <ThemedView style={styles.rowTitlesColumn}>
+                <ThemedText style={styles.rowTitle}>
+                  {t.attributeLabels.attribute}
+                </ThemedText>
+                <ThemedText style={styles.rowTitle}>
+                  {t.attributeLabels.score}
+                </ThemedText>
+                <ThemedText style={styles.rowTitle}>
+                  {t.attributeLabels.extra}
+                </ThemedText>
+              </ThemedView>
+
+              {/* Attribute Data Columns */}
+              {attributes.map((attr) => (
+                <ThemedView key={attr} style={styles.attributeColumn}>
+                  <ThemedText style={styles.attributeName} numberOfLines={1}>
+                    {t.attributes[attr]}
+                  </ThemedText>
+                  <View style={styles.pickerContainer}>
+                    <Picker
+                      selectedValue={characterData.attributes[attr].score}
+                      onValueChange={(value) =>
+                        updateAttributeScore(attr, value)
+                      }
+                      style={styles.picker}
+                      dropdownIconColor='#000'
+                    >
+                      <Picker.Item label='-' value='' />
+                      {Array.from({ length: 20 }, (_, i) => i + 6).map(
+                        (num) => (
+                          <Picker.Item
+                            key={num}
+                            label={num.toString()}
+                            value={num.toString()}
+                          />
+                        )
+                      )}
+                    </Picker>
+                  </View>
+                  <TextInput
+                    style={[
+                      styles.attributeInput,
+                      focusedInput === `attr-${attr}` && styles.inputFocused,
+                    ]}
+                    value={characterData.attributes[attr].extraDamage}
+                    editable={false}
+                    placeholder='Extra'
+                    onFocus={() => setFocusedInput(`attr-${attr}`)}
+                    onBlur={() => setFocusedInput(null)}
+                  />
+                </ThemedView>
+              ))}
+            </ThemedView>
           </ThemedView>
         </ThemedView>
-      </ThemedView>
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 }
 
@@ -343,16 +372,26 @@ const styles = StyleSheet.create({
   },
   languageSelector: {
     marginBottom: 20,
+    alignItems: "flex-end",
+  },
+  languagePicker: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    maxWidth: 300,
+  },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: "#90AA83",
+    borderRadius: 4,
+    height: 40,
+    overflow: "hidden",
+    backgroundColor: "#FFFFFF",
+    width: 150,
   },
   picker: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 10,
-  },
-  languageButton: {
-    color: "#007AFF",
-    fontSize: 16,
+    height: 40,
+    width: "100%",
   },
   form: {
     gap: 16,
@@ -398,7 +437,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     textTransform: "uppercase",
     letterSpacing: 0.8,
-    backgroundColor: "#90AA83",
+    backgroundColor: "#2F4F4F",
     paddingVertical: 4,
     paddingHorizontal: 12,
     alignSelf: "flex-start",
@@ -408,14 +447,38 @@ const styles = StyleSheet.create({
     transform: [{ skewX: "15deg" }],
     color: "#FFFFF0",
   },
-  input: {
-    borderWidth: 1,
-    borderColor: "#2F4F4F",
-    borderRadius: 4,
-    padding: 12,
-    marginBottom: 12,
-    backgroundColor: "#FFFFFF",
-    fontSize: 16,
+  input: Platform.select({
+    web: {
+      borderWidth: 1,
+      borderColor: "#90AA83",
+      borderRadius: 4,
+      padding: 12,
+      marginBottom: 12,
+      backgroundColor: "#FFFFFF",
+      fontSize: 16,
+      outline: "none",
+      height: 40,
+      WebkitTapHighlightColor: "transparent",
+      "&:focus": {
+        outline: "none",
+        WebkitAppearance: "none",
+        boxShadow: "none",
+      },
+    },
+    default: {
+      borderWidth: 1,
+      borderColor: "#90AA83",
+      borderRadius: 4,
+      padding: 12,
+      marginBottom: 12,
+      backgroundColor: "#FFFFFF",
+      fontSize: 16,
+      height: 40,
+    },
+  }),
+  inputFocused: {
+    borderWidth: 2,
+    margin: -1,
   },
   rowContainer: {
     flexDirection: "row",
@@ -424,6 +487,7 @@ const styles = StyleSheet.create({
   },
   fieldContainer: {
     flex: 1,
+    height: 90,
   },
   attributesContainer: {
     flexDirection: "row",
@@ -461,64 +525,58 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
     textTransform: "uppercase",
   },
-  attributeInput: {
-    borderWidth: 1,
-    borderColor: "#2F4F4F",
-    borderRadius: 4,
-    padding: 8,
-    textAlign: "center",
-    height: 40,
-    backgroundColor: "#FFFFFF",
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContent: {
-    width: "80%",
-    padding: 20,
-    borderRadius: 10,
-    gap: 10,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 15,
-    textAlign: "center",
-  },
-  languageOption: {
-    padding: 15,
-    borderRadius: 5,
-  },
-  languageOptionText: {
-    fontSize: 16,
-  },
-  selectedLanguage: {
-    color: "#007AFF",
-    fontWeight: "bold",
-  },
+  attributeInput: Platform.select({
+    web: {
+      borderWidth: 1,
+      borderColor: "#90AA83",
+      borderRadius: 4,
+      padding: 8,
+      textAlign: "center",
+      height: 40,
+      backgroundColor: "#FFFFFF",
+      outline: "none",
+      WebkitTapHighlightColor: "transparent",
+      "&:focus": {
+        outline: "none",
+        WebkitAppearance: "none",
+        boxShadow: "none",
+      },
+    },
+    default: {
+      borderWidth: 1,
+      borderColor: "#90AA83",
+      borderRadius: 4,
+      padding: 8,
+      textAlign: "center",
+      height: 40,
+      backgroundColor: "#FFFFFF",
+    },
+  }),
   traitContainer: {
     flex: 1,
+    minHeight: 75,
   },
-  traitInput: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 4,
-    padding: 8,
-    textAlignVertical: "top",
-  },
-  pickerContainer: {
-    borderWidth: 1,
-    borderColor: "#2F4F4F",
-    borderRadius: 4,
-    height: 40,
-    overflow: "hidden",
-    backgroundColor: "#FFFFFF",
-  },
-  picker: {
-    height: 40,
-    width: "100%",
-  },
+  traitInput: Platform.select({
+    web: {
+      borderWidth: 1,
+      borderColor: "#90AA83",
+      borderRadius: 4,
+      padding: 8,
+      textAlignVertical: "top",
+      outline: "none",
+      WebkitTapHighlightColor: "transparent",
+      "&:focus": {
+        outline: "none",
+        WebkitAppearance: "none",
+        boxShadow: "none",
+      },
+    },
+    default: {
+      borderWidth: 1,
+      borderColor: "#90AA83",
+      borderRadius: 4,
+      padding: 8,
+      textAlignVertical: "top",
+    },
+  }),
 });
