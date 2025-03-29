@@ -161,13 +161,20 @@ export default function ExploreScreen() {
       </Modal>
 
       <ThemedView style={styles.form}>
-        <ThemedText style={styles.title}>{t.title}</ThemedText>
+        <ThemedText style={styles.title}>
+          <ThemedText style={styles.titleText}>{t.title}</ThemedText>
+        </ThemedText>
 
         {/* Basic Information */}
         <ThemedView style={styles.section}>
+          <ThemedText style={styles.sectionTitle}>
+            <ThemedText style={styles.titleText}>Basic Information</ThemedText>
+          </ThemedText>
           <ThemedView style={styles.rowContainer}>
             <ThemedView style={styles.fieldContainer}>
-              <ThemedText>{t.name}</ThemedText>
+              <ThemedText style={styles.fieldLabel}>
+                <ThemedText style={styles.fieldLabelText}>{t.name}</ThemedText>
+              </ThemedText>
               <TextInput
                 style={styles.input}
                 value={characterData.name}
@@ -176,7 +183,11 @@ export default function ExploreScreen() {
             </ThemedView>
 
             <ThemedView style={styles.fieldContainer}>
-              <ThemedText>{t.nationality}</ThemedText>
+              <ThemedText style={styles.fieldLabel}>
+                <ThemedText style={styles.fieldLabelText}>
+                  {t.nationality}
+                </ThemedText>
+              </ThemedText>
               <TextInput
                 style={styles.input}
                 value={characterData.nationality}
@@ -187,7 +198,9 @@ export default function ExploreScreen() {
             </ThemedView>
 
             <ThemedView style={styles.fieldContainer}>
-              <ThemedText>{t.rank}</ThemedText>
+              <ThemedText style={styles.fieldLabel}>
+                <ThemedText style={styles.fieldLabelText}>{t.rank}</ThemedText>
+              </ThemedText>
               <TextInput
                 style={styles.input}
                 value={characterData.rank}
@@ -198,7 +211,11 @@ export default function ExploreScreen() {
 
           <ThemedView style={styles.rowContainer}>
             <ThemedView style={styles.fieldContainer}>
-              <ThemedText>{t.archetype}</ThemedText>
+              <ThemedText style={styles.fieldLabel}>
+                <ThemedText style={styles.fieldLabelText}>
+                  {t.archetype}
+                </ThemedText>
+              </ThemedText>
               <TextInput
                 style={styles.input}
                 value={characterData.archetype}
@@ -209,7 +226,11 @@ export default function ExploreScreen() {
             </ThemedView>
 
             <ThemedView style={styles.fieldContainer}>
-              <ThemedText>{t.background}</ThemedText>
+              <ThemedText style={styles.fieldLabel}>
+                <ThemedText style={styles.fieldLabelText}>
+                  {t.background}
+                </ThemedText>
+              </ThemedText>
               <TextInput
                 style={styles.input}
                 value={characterData.background}
@@ -220,7 +241,11 @@ export default function ExploreScreen() {
             </ThemedView>
 
             <ThemedView style={styles.fieldContainer}>
-              <ThemedText>{t.personality}</ThemedText>
+              <ThemedText style={styles.fieldLabel}>
+                <ThemedText style={styles.fieldLabelText}>
+                  {t.personality}
+                </ThemedText>
+              </ThemedText>
               <TextInput
                 style={styles.input}
                 value={characterData.personality}
@@ -235,7 +260,7 @@ export default function ExploreScreen() {
         {/* Personal Traits Section */}
         <ThemedView style={styles.section}>
           <ThemedText style={styles.sectionTitle}>
-            {t.personalTraits}
+            <ThemedText style={styles.titleText}>{t.personalTraits}</ThemedText>
           </ThemedText>
           <ThemedView style={styles.rowContainer}>
             {characterData.personalTraits.map((trait, index) => (
@@ -336,29 +361,77 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+    color: "#F5F5F0",
+    backgroundColor: "#2F4F4F",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    alignSelf: "flex-start",
+    transform: [{ skewX: "-15deg" }],
   },
   section: {
-    gap: 8,
+    marginBottom: 24,
+    backgroundColor: "#f5f5f5",
+    padding: 16,
+    borderRadius: 8,
   },
-  rowContainer: {
-    flexDirection: "row",
-    gap: 8,
-    justifyContent: "space-between",
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: "800",
+    color: "#F5F5F0",
+    marginBottom: 16,
+    textTransform: "uppercase",
+    letterSpacing: 1,
+    backgroundColor: "#2F4F4F",
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    alignSelf: "flex-start",
+    transform: [{ skewX: "-15deg" }],
   },
-  fieldContainer: {
-    flex: 1,
+  titleText: {
+    transform: [{ skewX: "15deg" }],
+    color: "#F5F5F0",
+  },
+  fieldLabel: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#FFFFF0",
+    marginBottom: 8,
+    textTransform: "uppercase",
+    letterSpacing: 0.8,
+    backgroundColor: "#90AA83",
+    paddingVertical: 4,
+    paddingHorizontal: 12,
+    alignSelf: "flex-start",
+    transform: [{ skewX: "-15deg" }],
+  },
+  fieldLabelText: {
+    transform: [{ skewX: "15deg" }],
+    color: "#FFFFF0",
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#2F4F4F",
     borderRadius: 4,
-    padding: 8,
-    marginBottom: 8,
+    padding: 12,
+    marginBottom: 12,
+    backgroundColor: "#FFFFFF",
+    fontSize: 16,
+  },
+  rowContainer: {
+    flexDirection: "row",
+    gap: 16,
+    marginBottom: 16,
+  },
+  fieldContainer: {
+    flex: 1,
   },
   attributesContainer: {
     flexDirection: "row",
     gap: 12,
     width: "100%",
+    backgroundColor: "#FFFFFF",
+    padding: 16,
+    borderRadius: 8,
   },
   rowTitlesColumn: {
     gap: 12,
@@ -366,11 +439,13 @@ const styles = StyleSheet.create({
   },
   rowTitle: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "700",
+    color: "#2F4F4F",
     textAlign: "center",
     height: 40,
     textAlignVertical: "center",
     width: "100%",
+    textTransform: "uppercase",
   },
   attributeColumn: {
     flex: 1,
@@ -379,21 +454,21 @@ const styles = StyleSheet.create({
   },
   attributeName: {
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: "700",
+    color: "#556B2F",
     textAlign: "center",
     height: 40,
     textAlignVertical: "center",
-    width: "100%",
+    textTransform: "uppercase",
   },
   attributeInput: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#2F4F4F",
     borderRadius: 4,
     padding: 8,
     textAlign: "center",
     height: 40,
-    textAlignVertical: "center",
-    width: "100%",
+    backgroundColor: "#FFFFFF",
   },
   modalOverlay: {
     flex: 1,
@@ -424,11 +499,6 @@ const styles = StyleSheet.create({
     color: "#007AFF",
     fontWeight: "bold",
   },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
   traitContainer: {
     flex: 1,
   },
@@ -441,10 +511,11 @@ const styles = StyleSheet.create({
   },
   pickerContainer: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#2F4F4F",
     borderRadius: 4,
     height: 40,
     overflow: "hidden",
+    backgroundColor: "#FFFFFF",
   },
   picker: {
     height: 40,
